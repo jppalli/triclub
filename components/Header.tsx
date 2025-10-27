@@ -34,6 +34,9 @@ export default function Header() {
             <a href="#marketplace" className="text-slate-300 hover:text-white transition-colors">
               Marketplace
             </a>
+            <a href="/login" className="text-slate-300 hover:text-white transition-colors">
+              Iniciar Sesión
+            </a>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -69,6 +72,9 @@ export default function Header() {
               </a>
               <a href="#marketplace" className="text-slate-300 hover:text-white transition-colors">
                 Marketplace
+              </a>
+              <a href="/login" className="text-slate-300 hover:text-white transition-colors">
+                Iniciar Sesión
               </a>
               <button className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors text-left">
                 Solicitar Invitación
