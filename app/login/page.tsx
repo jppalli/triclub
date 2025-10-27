@@ -28,7 +28,7 @@ export default function LoginPage() {
           level: 'Elite',
           avatar: '/avatar-placeholder.jpg'
         }))
-        router.push('/triclub/dashboard/')
+        router.push('/dashboard/')
       } else {
         alert('Credenciales incorrectas. Usa: atleta@triclub.ar / triclub123')
       }
