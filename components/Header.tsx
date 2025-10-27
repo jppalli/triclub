@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Menu, X, Trophy, User } from 'lucide-react'
+import { Menu, X, Trophy } from 'lucide-react'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -12,8 +12,9 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <motion.div 
-            className="flex items-center space-x-2"
+          <motion.a
+            href="/triclub/"
+            className="flex items-center space-x-2 hover:opacity-80 transition-opacity cursor-pointer"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
@@ -21,7 +22,7 @@ export default function Header() {
             <Trophy className="h-8 w-8 text-accent-500" />
             <span className="text-xl font-bold text-white">TriClub</span>
             <span className="text-sm text-slate-400">Argentina</span>
-          </motion.div>
+          </motion.a>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">

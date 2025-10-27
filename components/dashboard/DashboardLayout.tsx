@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { 
   Trophy, 
   Home, 
@@ -34,19 +34,26 @@ interface DashboardLayoutProps {
   user: User
 }
 
-const navigation = [
-  { name: 'Dashboard', href: '/triclub/dashboard/', icon: Home, current: true },
-  { name: 'Entrenamientos', href: '/triclub/dashboard/workouts/', icon: Activity, current: false },
-  { name: 'Desafíos', href: '/triclub/dashboard/challenges/', icon: Target, current: false },
-  { name: 'Marketplace', href: '/triclub/dashboard/marketplace/', icon: ShoppingBag, current: false },
-  { name: 'Tienda Oficial', href: '/triclub/dashboard/store/', icon: Store, current: false },
-  { name: 'Comunidad', href: '/triclub/dashboard/community/', icon: Users, current: false },
-  { name: 'Configuración', href: '/triclub/dashboard/settings/', icon: Settings, current: false },
+const navigationItems = [
+  { name: 'Dashboard', href: '/triclub/dashboard/', icon: Home, path: '/triclub/dashboard' },
+  { name: 'Entrenamientos', href: '/triclub/dashboard/workouts/', icon: Activity, path: '/triclub/dashboard/workouts' },
+  { name: 'Desafíos', href: '/triclub/dashboard/challenges/', icon: Target, path: '/triclub/dashboard/challenges' },
+  { name: 'Marketplace', href: '/triclub/dashboard/marketplace/', icon: ShoppingBag, path: '/triclub/dashboard/marketplace' },
+  { name: 'Tienda Oficial', href: '/triclub/dashboard/store/', icon: Store, path: '/triclub/dashboard/store' },
+  { name: 'Comunidad', href: '/triclub/dashboard/community/', icon: Users, path: '/triclub/dashboard/community' },
+  { name: 'Configuración', href: '/triclub/dashboard/settings/', icon: Settings, path: '/triclub/dashboard/settings' },
 ]
 
 export default function DashboardLayout({ children, user }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const router = useRouter()
+  const pathname = usePathname()
+
+  // Create navigation with current state based on pathname
+  const navigation = navigationItems.map(item => ({
+    ...item,
+    current: pathname === item.path || (pathname === '/triclub/dashboard/' && item.path === '/triclub/dashboard')
+  }))
 
   const handleLogout = () => {
     localStorage.removeItem('triclub_user')
@@ -140,10 +147,10 @@ function SidebarContent({
     <>
       {/* Logo */}
       <div className="flex items-center justify-between p-6">
-        <div className="flex items-center space-x-2">
+        <a href="/triclub/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
           <Trophy className="h-8 w-8 text-accent-500" />
           <span className="text-xl font-bold text-white">TriClub</span>
-        </div>
+        </a>
         {onClose && (
           <button onClick={onClose} className="lg:hidden text-slate-400 hover:text-white">
             <X className="h-6 w-6" />

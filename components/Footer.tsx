@@ -33,8 +33,8 @@ export default function Footer() {
               <li><a href="#features" className="text-slate-300 hover:text-white transition-colors">Características</a></li>
               <li><a href="#points" className="text-slate-300 hover:text-white transition-colors">Sistema de Puntos</a></li>
               <li><a href="#marketplace" className="text-slate-300 hover:text-white transition-colors">Marketplace</a></li>
-              <li><a href="#" className="text-slate-300 hover:text-white transition-colors">Desafíos</a></li>
-              <li><a href="#" className="text-slate-300 hover:text-white transition-colors">Comunidad</a></li>
+              <li><a href="/triclub/login/" className="text-slate-300 hover:text-white transition-colors">Desafíos</a></li>
+              <li><a href="/triclub/login/" className="text-slate-300 hover:text-white transition-colors">Comunidad</a></li>
             </ul>
           </div>
 

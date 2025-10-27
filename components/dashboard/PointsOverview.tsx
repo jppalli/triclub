@@ -81,10 +81,10 @@ export default function PointsOverview({ user }: PointsOverviewProps) {
 
       {/* Quick Actions */}
       <div className="space-y-3">
-        <button className="w-full bg-gradient-to-r from-primary-600 to-accent-600 text-white py-3 rounded-xl font-medium hover:from-primary-700 hover:to-accent-700 transition-all flex items-center justify-center gap-2">
+        <a href="/triclub/dashboard/store/" className="w-full bg-gradient-to-r from-primary-600 to-accent-600 text-white py-3 rounded-xl font-medium hover:from-primary-700 hover:to-accent-700 transition-all flex items-center justify-center gap-2">
           <Gift className="h-4 w-4" />
           Ver Recompensas
-        </button>
+        </a>
         
         <button className="w-full border border-slate-600 text-slate-300 py-3 rounded-xl font-medium hover:border-slate-500 hover:text-white transition-all flex items-center justify-center gap-2">
           Historial de Puntos
