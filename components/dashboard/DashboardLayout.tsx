@@ -15,7 +15,8 @@ import {
   Menu,
   X,
   Bell,
-  Star
+  Star,
+  Store
 } from 'lucide-react'
 
 interface User {
@@ -38,6 +39,7 @@ const navigation = [
   { name: 'Entrenamientos', href: '/triclub/dashboard/workouts/', icon: Activity, current: false },
   { name: 'Desafíos', href: '/triclub/dashboard/challenges/', icon: Target, current: false },
   { name: 'Marketplace', href: '/triclub/dashboard/marketplace/', icon: ShoppingBag, current: false },
+  { name: 'Tienda Oficial', href: '/triclub/dashboard/store/', icon: Store, current: false },
   { name: 'Comunidad', href: '/triclub/dashboard/community/', icon: Users, current: false },
   { name: 'Configuración', href: '/triclub/dashboard/settings/', icon: Settings, current: false },
 ]
