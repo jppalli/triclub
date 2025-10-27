@@ -126,7 +126,7 @@ export default function ChallengesPage() {
   useEffect(() => {
     const userData = localStorage.getItem('triclub_user')
     if (!userData) {
-      router.push('/triclub/login/')
+      router.push('/login/')
       return
     }
     setUser(JSON.parse(userData))
