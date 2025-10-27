@@ -25,41 +25,34 @@ export default function Header() {
           </motion.a>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
-            <a href="#features" className="text-slate-300 hover:text-white transition-colors">
-              Características
-            </a>
-            <a href="#points" className="text-slate-300 hover:text-white transition-colors">
-              Sistema de Puntos
-            </a>
-            <a href="#marketplace" className="text-slate-300 hover:text-white transition-colors">
-              Marketplace
-            </a>
+          <div className="hidden md:flex items-center justify-between flex-1 ml-8">
+            <nav className="flex items-center space-x-8">
+              <a href="#features" className="text-slate-300 hover:text-white transition-colors">
+                Características
+              </a>
+              <a href="#points" className="text-slate-300 hover:text-white transition-colors">
+                Sistema de Puntos
+              </a>
+              <a href="#marketplace" className="text-slate-300 hover:text-white transition-colors">
+                Marketplace
+              </a>
+            </nav>
             
-            {/* Login Section - More Visible */}
-            <div className="flex items-center space-x-3 ml-4 pl-4 border-l border-slate-600">
+            {/* Login Section - Right Side */}
+            <div className="flex items-center space-x-4">
+              <a href="/triclub/registro/" className="text-slate-300 hover:text-primary-400 transition-colors text-sm">
+                Ya tengo Invitación
+              </a>
               <motion.a
                 href="/triclub/login/"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-slate-700 text-white px-4 py-2 rounded-lg font-medium hover:bg-slate-600 transition-colors inline-block"
+                className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors inline-block"
               >
                 Iniciar Sesión
               </motion.a>
-              <a href="/triclub/registro/" className="text-slate-300 hover:text-primary-400 transition-colors text-sm">
-                Ya tengo Invitación
-              </a>
             </div>
-            
-            <motion.a
-              href="/triclub/unirse/"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors inline-block"
-            >
-              Quiero Unirme al Club
-            </motion.a>
-          </nav>
+          </div>
 
           {/* Mobile menu button */}
           <button
@@ -91,17 +84,13 @@ export default function Header() {
               
               {/* Mobile Login Section */}
               <div className="border-t border-slate-600 pt-4 space-y-3">
-                <a href="/triclub/login/" className="bg-slate-700 text-white px-4 py-2 rounded-lg font-medium hover:bg-slate-600 transition-colors inline-block w-full text-center">
-                  Iniciar Sesión
-                </a>
                 <a href="/triclub/registro/" className="text-slate-300 hover:text-primary-400 transition-colors text-sm block text-center">
                   Ya tengo Invitación
                 </a>
+                <a href="/triclub/login/" className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors inline-block w-full text-center">
+                  Iniciar Sesión
+                </a>
               </div>
-              
-              <a href="/triclub/unirse/" className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors text-center inline-block">
-                Quiero Unirme al Club
-              </a>
             </div>
           </motion.div>
         )}
