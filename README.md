@@ -134,3 +134,9 @@ Para más información sobre integración de clubes o acceso a la plataforma:
 ---
 
 *TriClub Argentina - El futuro del triatlón está aquí*
+
+## 🚀 Acceso a la Plataforma
+
+- **Sitio Web**: https://jppalli.github.io/triclub/
+- **Login Demo**: https://jppalli.github.io/triclub/login/
+- **Credenciales**: atleta@triclub.ar / triclub123
