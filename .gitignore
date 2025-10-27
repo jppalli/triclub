@@ -8,7 +8,7 @@ node_modules/
 
 # Next.js
 /.next/
-/out/
+# /out/ - commented out so GitHub Pages can use the exported files
 
 # Production
 /build
