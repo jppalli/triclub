@@ -34,12 +34,12 @@ interface DashboardLayoutProps {
 }
 
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard/', icon: Home, current: true },
-  { name: 'Entrenamientos', href: '/dashboard/workouts/', icon: Activity, current: false },
-  { name: 'Desafíos', href: '/dashboard/challenges/', icon: Target, current: false },
-  { name: 'Marketplace', href: '/dashboard/marketplace/', icon: ShoppingBag, current: false },
-  { name: 'Comunidad', href: '/dashboard/community/', icon: Users, current: false },
-  { name: 'Configuración', href: '/dashboard/settings/', icon: Settings, current: false },
+  { name: 'Dashboard', href: '/triclub/dashboard/', icon: Home, current: true },
+  { name: 'Entrenamientos', href: '/triclub/dashboard/workouts/', icon: Activity, current: false },
+  { name: 'Desafíos', href: '/triclub/dashboard/challenges/', icon: Target, current: false },
+  { name: 'Marketplace', href: '/triclub/dashboard/marketplace/', icon: ShoppingBag, current: false },
+  { name: 'Comunidad', href: '/triclub/dashboard/community/', icon: Users, current: false },
+  { name: 'Configuración', href: '/triclub/dashboard/settings/', icon: Settings, current: false },
 ]
 
 export default function DashboardLayout({ children, user }: DashboardLayoutProps) {
@@ -48,7 +48,7 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
 
   const handleLogout = () => {
     localStorage.removeItem('triclub_user')
-    router.push('/')
+    router.push('/triclub/')
   }
 
   return (

@@ -32,7 +32,7 @@ export default function MarketplacePage() {
   useEffect(() => {
     const userData = localStorage.getItem('triclub_user')
     if (!userData) {
-      router.push('/login/')
+      router.push('/triclub/login/')
       return
     }
     setUser(JSON.parse(userData))
