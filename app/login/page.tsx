@@ -28,7 +28,7 @@ export default function LoginPage() {
           level: 'Elite',
           avatar: '/avatar-placeholder.jpg'
         }))
-        router.push('/dashboard')
+        router.push('/triclub/dashboard/')
       } else {
         alert('Credenciales incorrectas. Usa: atleta@triclub.ar / triclub123')
       }
@@ -139,7 +139,7 @@ export default function LoginPage() {
             </a>
             <div className="text-slate-500 text-sm">
               ¿No tienes cuenta? 
-              <a href="/" className="text-primary-400 hover:text-primary-300 ml-1">
+              <a href="/triclub/" className="text-primary-400 hover:text-primary-300 ml-1">
                 Solicitar invitación
               </a>
             </div>

@@ -34,7 +34,7 @@ export default function Header() {
             <a href="#marketplace" className="text-slate-300 hover:text-white transition-colors">
               Marketplace
             </a>
-            <a href="/login" className="text-slate-300 hover:text-white transition-colors">
+            <a href="/triclub/login/" className="text-slate-300 hover:text-white transition-colors">
               Iniciar Sesión
             </a>
             <motion.button
@@ -73,7 +73,7 @@ export default function Header() {
               <a href="#marketplace" className="text-slate-300 hover:text-white transition-colors">
                 Marketplace
               </a>
-              <a href="/login" className="text-slate-300 hover:text-white transition-colors">
+              <a href="/triclub/login/" className="text-slate-300 hover:text-white transition-colors">
                 Iniciar Sesión
               </a>
               <button className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors text-left">
