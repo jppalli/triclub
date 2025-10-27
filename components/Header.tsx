@@ -37,13 +37,17 @@ export default function Header() {
             <a href="/triclub/login/" className="text-slate-300 hover:text-white transition-colors">
               Iniciar Sesión
             </a>
-            <motion.button
+            <a href="/triclub/registro/" className="text-slate-300 hover:text-white transition-colors">
+              Ya tengo Invitación
+            </a>
+            <motion.a
+              href="/triclub/unirse/"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors"
+              className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors inline-block"
             >
-              Solicitar Invitación
-            </motion.button>
+              Quiero Unirme al Club
+            </motion.a>
           </nav>
 
           {/* Mobile menu button */}
@@ -76,9 +80,12 @@ export default function Header() {
               <a href="/triclub/login/" className="text-slate-300 hover:text-white transition-colors">
                 Iniciar Sesión
               </a>
-              <button className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors text-left">
-                Solicitar Invitación
-              </button>
+              <a href="/triclub/registro/" className="text-slate-300 hover:text-white transition-colors">
+                Ya tengo Invitación
+              </a>
+              <a href="/triclub/unirse/" className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors text-left inline-block">
+                Quiero Unirme al Club
+              </a>
             </div>
           </motion.div>
         )}

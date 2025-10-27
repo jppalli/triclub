@@ -31,21 +31,23 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
           >
-            <motion.button
+            <motion.a
+              href="/triclub/unirse/"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="bg-primary-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-primary-700 transition-colors flex items-center justify-center gap-2"
             >
-              Solicitar Invitación
+              Quiero Unirme al Club
               <ArrowRight className="h-5 w-5" />
-            </motion.button>
-            <motion.button
+            </motion.a>
+            <motion.a
+              href="/triclub/registro/"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="border-2 border-slate-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:border-slate-500 transition-colors"
             >
-              Ver Demo
-            </motion.button>
+              Ya tengo Invitación
+            </motion.a>
           </motion.div>
 
           {/* Stats */}
