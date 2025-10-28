@@ -24,6 +24,7 @@ yarn-error.log*
 
 # Local env files
 .env*.local
+.env
 
 # Vercel
 .vercel
@@ -38,3 +39,8 @@ next-env.d.ts
 
 # OS
 Thumbs.db
+
+# Database
+/prisma/migrations/
+/prisma/dev.db*
+/app/generated/prisma

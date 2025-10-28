@@ -1,5 +1,7 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
+import { TRPCProvider } from '@/components/providers/TRPCProvider'
+import { SessionProvider } from 'next-auth/react'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -15,7 +17,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <SessionProvider>
+          <TRPCProvider>
+            {children}
+          </TRPCProvider>
+        </SessionProvider>
+      </body>
     </html>
   )
 }
