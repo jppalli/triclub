@@ -422,10 +422,10 @@ export default function ChallengesPage() {
 
                     <button 
                       onClick={() => handleJoinChallenge(challenge.id)}
-                      disabled={joinChallenge.isLoading}
+                      disabled={joinChallenge.isPending}
                       className="w-full border-2 border-primary-600 text-primary-400 py-3 rounded-xl font-medium hover:bg-primary-600 hover:text-white transition-all disabled:opacity-50"
                     >
-                      {joinChallenge.isLoading ? 'Uniéndose...' : 'Unirse al Desafío'}
+                      {joinChallenge.isPending ? 'Uniéndose...' : 'Unirse al Desafío'}
                     </button>
                   </motion.div>
                 ))
