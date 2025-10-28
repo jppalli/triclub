@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useRouter, usePathname } from 'next/navigation'
+import { signOut } from 'next-auth/react'
 import { 
   Trophy, 
   Home, 
@@ -35,13 +36,14 @@ interface DashboardLayoutProps {
 }
 
 const navigationItems = [
-  { name: 'Dashboard', href: '/triclub/dashboard/', icon: Home, path: '/triclub/dashboard' },
-  { name: 'Entrenamientos', href: '/triclub/dashboard/workouts/', icon: Activity, path: '/triclub/dashboard/workouts' },
-  { name: 'Desafíos', href: '/triclub/dashboard/challenges/', icon: Target, path: '/triclub/dashboard/challenges' },
-  { name: 'Marketplace', href: '/triclub/dashboard/marketplace/', icon: ShoppingBag, path: '/triclub/dashboard/marketplace' },
-  { name: 'Tienda Oficial', href: '/triclub/dashboard/store/', icon: Store, path: '/triclub/dashboard/store' },
-  { name: 'Comunidad', href: '/triclub/dashboard/community/', icon: Users, path: '/triclub/dashboard/community' },
-  { name: 'Configuración', href: '/triclub/dashboard/settings/', icon: Settings, path: '/triclub/dashboard/settings' },
+  { name: 'Dashboard', href: '/dashboard', icon: Home, path: '/dashboard' },
+  { name: 'Entrenamientos', href: '/dashboard/workouts', icon: Activity, path: '/dashboard/workouts' },
+  { name: 'Desafíos', href: '/dashboard/challenges', icon: Target, path: '/dashboard/challenges' },
+  { name: 'Marketplace', href: '/dashboard/marketplace', icon: ShoppingBag, path: '/dashboard/marketplace' },
+  { name: 'Tienda Oficial', href: '/dashboard/store', icon: Store, path: '/dashboard/store' },
+  { name: 'Invitaciones', href: '/dashboard/invitations', icon: Star, path: '/dashboard/invitations' },
+  { name: 'Comunidad', href: '/dashboard/community', icon: Users, path: '/dashboard/community' },
+  { name: 'Configuración', href: '/dashboard/settings', icon: Settings, path: '/dashboard/settings' },
 ]
 
 export default function DashboardLayout({ children, user }: DashboardLayoutProps) {
@@ -52,12 +54,11 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
   // Create navigation with current state based on pathname
   const navigation = navigationItems.map(item => ({
     ...item,
-    current: pathname === item.path || (pathname === '/triclub/dashboard/' && item.path === '/triclub/dashboard')
+    current: pathname === item.path || (pathname === '/dashboard' && item.path === '/dashboard')
   }))
 
-  const handleLogout = () => {
-    localStorage.removeItem('triclub_user')
-    router.push('/triclub/')
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: '/' })
   }
 
   return (
@@ -147,7 +148,7 @@ function SidebarContent({
     <>
       {/* Logo */}
       <div className="flex items-center justify-between p-6">
-        <a href="/triclub/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
+        <a href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
           <Trophy className="h-8 w-8 text-accent-500" />
           <span className="text-xl font-bold text-white">TriClub</span>
         </a>
@@ -191,7 +192,7 @@ function SidebarContent({
                 href={item.href}
                 className={`group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                   item.current
-                    ? 'bg-primary-600 text-white'
+                    ? 'bg-yellow-500 text-black font-bold'
                     : 'text-slate-300 hover:text-white hover:bg-slate-700'
                 }`}
               >

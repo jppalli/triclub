@@ -1,25 +1,17 @@
-import { type NextAuthOptions } from 'next-auth'
-import CredentialsProvider from 'next-auth/providers/credentials'
-import { PrismaAdapter } from '@next-auth/prisma-adapter'
-import { prisma } from './prisma'
-import bcrypt from 'bcryptjs'
-import { z } from 'zod'
+import { NextAuthOptions } from "next-auth"
+import CredentialsProvider from "next-auth/providers/credentials"
+import { PrismaAdapter } from "@next-auth/prisma-adapter"
+import { prisma } from "./prisma"
+import bcrypt from "bcryptjs"
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
-  session: {
-    strategy: 'jwt',
-  },
-  pages: {
-    signIn: '/triclub/login',
-    signUp: '/triclub/registro',
-  },
   providers: [
     CredentialsProvider({
-      name: 'credentials',
+      name: "credentials",
       credentials: {
-        email: { label: 'Email', type: 'email' },
-        password: { label: 'Password', type: 'password' }
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
@@ -32,7 +24,7 @@ export const authOptions: NextAuthOptions = {
           }
         })
 
-        if (!user || !user.password) {
+        if (!user) {
           return null
         }
 
@@ -54,19 +46,25 @@ export const authOptions: NextAuthOptions = {
       }
     })
   ],
+  session: {
+    strategy: "jwt"
+  },
   callbacks: {
-    session: ({ session, token }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: token.sub,
-      },
-    }),
-    jwt: ({ token, user }) => {
+    async jwt({ token, user }) {
       if (user) {
-        token.sub = user.id
+        token.id = user.id
       }
       return token
     },
+    async session({ session, token }) {
+      if (token) {
+        session.user.id = token.id as string
+      }
+      return session
+    }
   },
+  pages: {
+    signIn: "/login",
+    signUp: "/registro"
+  }
 }

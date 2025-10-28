@@ -170,7 +170,7 @@ export default function PointsSystem() {
               </div>
 
               <motion.a
-                href="/triclub/login/"
+                href="/login"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="w-full mt-8 bg-gradient-to-r from-primary-600 to-accent-600 text-white py-4 rounded-xl font-semibold text-lg hover:from-primary-700 hover:to-accent-700 transition-all inline-flex items-center justify-center"
@@ -200,7 +200,7 @@ export default function PointsSystem() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <motion.a
-                href="/triclub/login/"
+                href="/login"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="bg-primary-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-primary-700 transition-colors inline-flex items-center justify-center"
@@ -208,7 +208,7 @@ export default function PointsSystem() {
                 Explorar Tienda
               </motion.a>
               <motion.a
-                href="/triclub/login/"
+                href="/login"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="border-2 border-slate-600 text-white px-8 py-3 rounded-xl font-semibold hover:border-slate-500 transition-colors inline-flex items-center justify-center"

@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Star, Gift, TrendingUp, ArrowRight } from 'lucide-react'
+import { calculateUserStats } from '@/lib/stats-calculator'
 
 interface User {
   id: number
@@ -15,22 +16,35 @@ interface User {
 
 interface PointsOverviewProps {
   user: User
+  userStats?: any
 }
 
-const nextRewards = [
-  {
-    name: 'Descuento Garmin 10%',
-    points: 1000,
-    progress: 85
-  },
-  {
-    name: 'Producto Gratis',
-    points: 5000,
-    progress: 57
-  }
-]
+// Función para calcular próximas recompensas basadas en puntos actuales
+const getNextRewards = (currentPoints: number) => {
+  const rewards = [
+    { name: 'Descuento Garmin 10%', points: 1000 },
+    { name: 'Camiseta TriClub', points: 2500 },
+    { name: 'Producto Gratis', points: 5000 },
+    { name: 'Reloj Garmin', points: 10000 },
+    { name: 'Bicicleta Premium', points: 25000 }
+  ]
+  
+  return rewards
+    .filter(reward => reward.points > currentPoints)
+    .slice(0, 2)
+    .map(reward => ({
+      ...reward,
+      progress: Math.min((currentPoints / reward.points) * 100, 100)
+    }))
+}
 
-export default function PointsOverview({ user }: PointsOverviewProps) {
+export default function PointsOverview({ user, userStats }: PointsOverviewProps) {
+  // Usar puntos del usuario real
+  const totalPoints = user.points || 0
+  const thisMonthPoints = userStats?.thisMonthPoints || 0
+  
+  // Obtener próximas recompensas
+  const nextRewards = getNextRewards(totalPoints)
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -46,14 +60,16 @@ export default function PointsOverview({ user }: PointsOverviewProps) {
       {/* Current Points */}
       <div className="text-center mb-6">
         <div className="text-4xl font-bold text-white mb-2">
-          {user.points.toLocaleString()}
+          {totalPoints.toLocaleString()}
         </div>
         <div className="text-slate-400">Puntos totales</div>
         
-        <div className="flex items-center justify-center gap-2 mt-3 text-green-400">
-          <TrendingUp className="h-4 w-4" />
-          <span className="text-sm font-medium">+285 esta semana</span>
-        </div>
+        {thisMonthPoints > 0 && (
+          <div className="flex items-center justify-center gap-2 mt-3 text-green-400">
+            <TrendingUp className="h-4 w-4" />
+            <span className="text-sm font-medium">+{thisMonthPoints} este mes</span>
+          </div>
+        )}
       </div>
 
       {/* Progress to Next Rewards */}
@@ -81,7 +97,7 @@ export default function PointsOverview({ user }: PointsOverviewProps) {
 
       {/* Quick Actions */}
       <div className="space-y-3">
-        <a href="/triclub/dashboard/store/" className="w-full bg-gradient-to-r from-primary-600 to-accent-600 text-white py-3 rounded-xl font-medium hover:from-primary-700 hover:to-accent-700 transition-all flex items-center justify-center gap-2">
+        <a href="/dashboard/store" className="w-full bg-gradient-to-r from-primary-600 to-accent-600 text-white py-3 rounded-xl font-medium hover:from-primary-700 hover:to-accent-700 transition-all flex items-center justify-center gap-2">
           <Gift className="h-4 w-4" />
           Ver Recompensas
         </a>

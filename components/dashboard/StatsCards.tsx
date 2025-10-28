@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Activity, Target, Trophy, TrendingUp } from 'lucide-react'
+import { calculateUserStats, calculatePercentageChange } from '@/lib/stats-calculator'
 
 interface User {
   id: number
@@ -15,47 +16,67 @@ interface User {
 
 interface StatsCardsProps {
   user: User
+  userStats?: any // Stats del usuario desde la API
 }
 
-const stats = [
-  {
-    name: 'Entrenamientos',
-    value: '47',
-    change: '+12%',
-    changeType: 'positive',
-    icon: Activity,
-    color: 'text-primary-500'
-  },
-  {
-    name: 'Desafíos Completados',
-    value: '8',
-    change: '+25%',
-    changeType: 'positive',
-    icon: Target,
-    color: 'text-accent-500'
-  },
-  {
-    name: 'Ranking del Club',
-    value: '#3',
-    change: '+2',
-    changeType: 'positive',
-    icon: Trophy,
-    color: 'text-primary-500'
-  },
-  {
-    name: 'Progreso Mensual',
-    value: '85%',
-    change: '+15%',
-    changeType: 'positive',
-    icon: TrendingUp,
-    color: 'text-accent-500'
+export default function StatsCards({ user, userStats }: StatsCardsProps) {
+  // Usar stats del usuario o fallback a datos vacíos
+  const stats = userStats || {
+    totalWorkouts: 0,
+    totalDistance: 0,
+    totalDuration: 0,
+    thisMonthWorkouts: 0,
+    thisMonthDistance: 0,
+    thisMonthDuration: 0,
+    lastMonthWorkouts: 0,
+    lastMonthDistance: 0,
+    lastMonthDuration: 0
   }
-]
 
-export default function StatsCards({ user }: StatsCardsProps) {
+  const statsData = [
+    {
+      name: 'Entrenamientos',
+      value: stats.totalWorkouts.toString(),
+      change: stats.thisMonthWorkouts > 0 
+        ? `${stats.thisMonthWorkouts} este mes` 
+        : 'Sin entrenamientos este mes',
+      changeType: stats.thisMonthWorkouts >= stats.lastMonthWorkouts ? 'positive' as const : 'negative' as const,
+      icon: Activity,
+      color: 'text-primary-500'
+    },
+    {
+      name: 'Distancia Total',
+      value: `${stats.totalDistance.toFixed(1)} km`,
+      change: stats.thisMonthDistance > 0 
+        ? `${stats.thisMonthDistance.toFixed(1)}km este mes`
+        : 'Sin distancia este mes',
+      changeType: stats.thisMonthDistance >= stats.lastMonthDistance ? 'positive' as const : 'negative' as const,
+      icon: Target,
+      color: 'text-accent-500'
+    },
+    {
+      name: 'Ranking del Club',
+      value: `#${stats.rankingPosition}`,
+      change: stats.level,
+      changeType: 'positive' as const,
+      icon: Trophy,
+      color: 'text-primary-500'
+    },
+    {
+      name: 'Tiempo Total',
+      value: `${stats.totalDuration.toFixed(1)}h`,
+      change: stats.thisMonthDuration > 0 
+        ? `${stats.thisMonthDuration.toFixed(1)}h este mes`
+        : 'Sin tiempo este mes',
+      changeType: 'positive' as const,
+      icon: TrendingUp,
+      color: 'text-accent-500'
+    }
+  ]
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {stats.map((stat, index) => (
+      {statsData.map((stat, index) => (
         <motion.div
           key={stat.name}
           initial={{ opacity: 0, y: 20 }}

@@ -37,4 +37,4 @@ async function testConnection() {
   }
 }
 
-main()
+testConnection()

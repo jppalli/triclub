@@ -3,10 +3,10 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import DashboardLayout from '@/components/dashboard/DashboardLayout'
-import MarketplaceGrid from '@/components/marketplace/MarketplaceGrid'
-import MarketplaceFilters from '@/components/marketplace/MarketplaceFilters'
-import MarketplaceHeader from '@/components/marketplace/MarketplaceHeader'
+import { Store, Wrench } from 'lucide-react'
+import { calculateUserStats } from '@/lib/stats-calculator'
 
 interface User {
   id: number
@@ -19,26 +19,33 @@ interface User {
 }
 
 export default function MarketplacePage() {
+  const { data: session, status } = useSession()
   const [user, setUser] = useState<User | null>(null)
-  const [activeTab, setActiveTab] = useState('comprar')
-  const [filters, setFilters] = useState({
-    category: 'all',
-    priceRange: 'all',
-    condition: 'all',
-    sortBy: 'newest'
-  })
   const router = useRouter()
 
   useEffect(() => {
-    const userData = localStorage.getItem('triclub_user')
-    if (!userData) {
-      router.push('/triclub/login/')
+    if (status === 'loading') return
+
+    if (status === 'unauthenticated') {
+      router.push('/login')
       return
     }
-    setUser(JSON.parse(userData))
-  }, [router])
 
-  if (!user) {
+    if (session?.user) {
+      const stats = calculateUserStats('cmhabbtsv0000tmtguvd0b2lx')
+      setUser({
+        id: 1,
+        name: session.user.name || 'Usuario',
+        email: session.user.email || '',
+        club: `TriClub ${stats.level}`,
+        points: stats.totalPoints,
+        level: stats.level,
+        avatar: session.user.image || '/avatar-placeholder.jpg'
+      })
+    }
+  }, [session, status, router])
+
+  if (status === 'loading' || !user) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
@@ -49,28 +56,24 @@ export default function MarketplacePage() {
   return (
     <DashboardLayout user={user}>
       <div className="space-y-6">
-        <MarketplaceHeader 
-          user={user}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-        />
-        
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <div className="lg:col-span-1">
-            <MarketplaceFilters 
-              filters={filters}
-              setFilters={setFilters}
-            />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-12 border border-slate-700 text-center"
+        >
+          <div className="flex justify-center mb-6">
+            <div className="bg-slate-700/50 rounded-full p-4">
+              <Wrench className="h-12 w-12 text-slate-400" />
+            </div>
           </div>
-          
-          <div className="lg:col-span-3">
-            <MarketplaceGrid 
-              activeTab={activeTab}
-              filters={filters}
-              user={user}
-            />
-          </div>
-        </div>
+          <h1 className="text-3xl font-bold text-white mb-4">Marketplace</h1>
+          <p className="text-slate-400 text-lg mb-2">En desarrollo</p>
+          <p className="text-slate-500 max-w-md mx-auto">
+            Estamos trabajando para brindarte una experiencia de marketplace excepcional. 
+            Próximamente podrás comprar y vender productos con otros miembros de la comunidad.
+          </p>
+        </motion.div>
       </div>
     </DashboardLayout>
   )

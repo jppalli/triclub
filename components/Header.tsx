@@ -13,7 +13,7 @@ export default function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <motion.a
-            href="/triclub/"
+            href="/"
             className="flex items-center space-x-2 hover:opacity-80 transition-opacity cursor-pointer"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -40,11 +40,11 @@ export default function Header() {
             
             {/* Login Section - Right Side */}
             <div className="flex items-center space-x-4">
-              <a href="/triclub/registro/" className="text-slate-300 hover:text-primary-400 transition-colors text-sm">
+              <a href="/registro" className="text-slate-300 hover:text-primary-400 transition-colors text-sm">
                 Ya tengo Invitación
               </a>
               <motion.a
-                href="/triclub/login/"
+                href="/login"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors inline-block"
@@ -84,10 +84,10 @@ export default function Header() {
               
               {/* Mobile Login Section */}
               <div className="border-t border-slate-600 pt-4 space-y-3">
-                <a href="/triclub/registro/" className="text-slate-300 hover:text-primary-400 transition-colors text-sm block text-center">
+                <a href="/registro" className="text-slate-300 hover:text-primary-400 transition-colors text-sm block text-center">
                   Ya tengo Invitación
                 </a>
-                <a href="/triclub/login/" className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors inline-block w-full text-center">
+                <a href="/login" className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors inline-block w-full text-center">
                   Iniciar Sesión
                 </a>
               </div>

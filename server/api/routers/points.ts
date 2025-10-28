@@ -2,7 +2,9 @@ import { z } from 'zod'
 import { createTRPCRouter, protectedProcedure } from '@/lib/trpc'
 
 export const pointsRouter = createTRPCRouter({
-  getBalance: protectedProcedure.query(async ({ ctx }) => {
+  getBalance: protectedProcedure
+    .input(z.void().optional())
+    .query(async ({ ctx }) => {
     const user = await ctx.prisma.user.findUnique({
       where: { id: ctx.session.user.id },
       select: { points: true },

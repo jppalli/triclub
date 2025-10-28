@@ -51,7 +51,7 @@ export default function SettingsPage() {
   useEffect(() => {
     const userData = localStorage.getItem('triclub_user')
     if (!userData) {
-      router.push('/triclub/login/')
+      router.push('/login')
       return
     }
     const parsedUser = JSON.parse(userData)

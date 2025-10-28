@@ -2,71 +2,86 @@
 
 import { motion } from 'framer-motion'
 import { Activity, MapPin, Clock, Zap, Trophy, Target } from 'lucide-react'
+import { getUserGarminActivities } from '@/lib/garmin-mock-data'
 
-const activities = [
-  {
-    id: 1,
-    type: 'workout',
-    title: 'Entrenamiento de Natación',
-    description: '2.5km en piscina olímpica',
-    time: '45 min',
-    location: 'Club Náutico San Isidro',
-    points: 75,
-    timestamp: 'Hace 2 horas',
-    icon: Activity,
-    color: 'text-primary-500'
-  },
-  {
-    id: 2,
-    type: 'challenge',
-    title: 'Desafío Semanal Completado',
-    description: 'Meta: 150km de ciclismo',
-    time: '6 días',
-    location: 'Múltiples ubicaciones',
-    points: 200,
-    timestamp: 'Ayer',
-    icon: Target,
-    color: 'text-accent-500'
-  },
-  {
-    id: 3,
-    type: 'workout',
-    title: 'Carrera Matutina',
-    description: '10km por la costanera',
-    time: '42 min',
-    location: 'Puerto Madero',
-    points: 50,
-    timestamp: 'Hace 2 días',
-    icon: Activity,
-    color: 'text-primary-500'
-  },
-  {
-    id: 4,
-    type: 'achievement',
-    title: 'Nuevo Logro Desbloqueado',
-    description: 'Nadador Constante - 30 días seguidos',
-    time: '',
-    location: '',
-    points: 500,
-    timestamp: 'Hace 3 días',
-    icon: Trophy,
-    color: 'text-yellow-500'
-  },
-  {
-    id: 5,
-    type: 'workout',
-    title: 'Entrenamiento de Ciclismo',
-    description: '45km ruta por Tigre',
-    time: '1h 35min',
-    location: 'Delta del Tigre',
-    points: 90,
-    timestamp: 'Hace 4 días',
-    icon: Activity,
-    color: 'text-primary-500'
+// Función para generar feed de actividades basado en entrenamientos reales
+const generateActivityFeed = (userId?: string) => {
+  // Si no hay userId, devolver array vacío
+  if (!userId) {
+    return []
   }
-]
+  
+  const workouts = getUserGarminActivities(userId)
+  
+  // Convertir entrenamientos a formato de actividades
+  const workoutActivities = workouts.slice(0, 4).map((workout, index) => {
+    const daysAgo = index
+    const timestamp = daysAgo === 0 ? 'Hace unas horas' : 
+                     daysAgo === 1 ? 'Ayer' : 
+                     `Hace ${daysAgo} días`
+    
+    return {
+      id: workout.id,
+      type: 'workout',
+      title: workout.title,
+      description: workout.distance ? `${workout.distance.toFixed(1)}km` : `${workout.duration} min`,
+      time: `${workout.duration} min`,
+      location: workout.location || 'Ubicación no especificada',
+      points: workout.points,
+      timestamp,
+      icon: Activity,
+      color: workout.type === 'SWIMMING' ? 'text-blue-500' : 
+             workout.type === 'CYCLING' ? 'text-green-500' : 
+             workout.type === 'RUNNING' ? 'text-orange-500' : 'text-primary-500'
+    }
+  })
+  
+  // Agregar algunas actividades de logros basadas en datos reales
+  const totalPoints = workouts.reduce((sum, w) => sum + w.points, 0)
+  const totalDistance = workouts.reduce((sum, w) => sum + (w.distance || 0), 0)
+  
+  const achievements = []
+  
+  if (totalPoints >= 5000) {
+    // Calcular cuándo se alcanzó el nivel Elite (basado en el último entrenamiento que llevó a 5000+ puntos)
+    let pointsAccumulated = 0
+    let achievementDate = 'Recientemente'
+    
+    for (let i = workouts.length - 1; i >= 0; i--) {
+      pointsAccumulated += workouts[i].points
+      if (pointsAccumulated >= 5000) {
+        const daysAgo = Math.floor((new Date().getTime() - new Date(workouts[i].createdAt).getTime()) / (1000 * 60 * 60 * 24))
+        achievementDate = daysAgo === 0 ? 'Hoy' : 
+                         daysAgo === 1 ? 'Ayer' : 
+                         daysAgo <= 7 ? 'Esta semana' : 
+                         `Hace ${daysAgo} días`
+        break
+      }
+    }
+    
+    achievements.push({
+      id: 'achievement_elite',
+      type: 'achievement',
+      title: 'Nivel Elite Alcanzado',
+      description: `${totalPoints} puntos totales`,
+      time: '',
+      location: '',
+      points: 500,
+      timestamp: achievementDate,
+      icon: Trophy,
+      color: 'text-yellow-500'
+    })
+  }
+  
+  return [...workoutActivities, ...achievements].slice(0, 5)
+}
 
-export default function ActivityFeed() {
+interface ActivityFeedProps {
+  userId?: string
+}
+
+export default function ActivityFeed({ userId }: ActivityFeedProps) {
+  const activities = generateActivityFeed(userId)
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

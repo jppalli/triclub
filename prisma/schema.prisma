@@ -79,34 +79,75 @@ model User {
   posts         Post[]
   comments      Comment[]
   likes         Like[]
-  pointsHistory PointsHistory[]
-  orders        Order[]
-  products      Product[]
-  reviews       Review[]
+  pointsHistory   PointsHistory[]
+  orders          Order[]
+  products        Product[]
+  reviews         Review[]
+  officialOrders  OfficialOrder[]
+  officialReviews OfficialReview[]
+  cartItems       CartItem[]
   
-  inviter       User?     @relation("UserInvites", fields: [invitedBy], references: [id])
-  invitees      User[]    @relation("UserInvites")
+  inviter         User?           @relation("UserInvites", fields: [invitedBy], references: [id])
+  invitees        User[]          @relation("UserInvites")
+  sentInvites     Invitation[]    @relation("InviteSender")
+  receivedInvites Invitation[]    @relation("InviteReceiver")
+  
+  // Community Relations
+  authoredPosts   CommunityPost[] @relation("PostAuthor")
+  postComments    PostComment[]   @relation("CommentAuthor")
+  postLikes       PostLike[]      @relation("LikeAuthor")
+  eventParticipants EventParticipant[]
+}
+
+// Sistema de invitaciones
+model Invitation {
+  id          String          @id @default(cuid())
+  code        String          @unique
+  email       String?         // Email del invitado (opcional)
+  senderId    String
+  receiverId  String?         // Se llena cuando alguien usa el código
+  status      InvitationStatus @default(PENDING)
+  expiresAt   DateTime
+  usedAt      DateTime?
+  
+  // Metadata
+  senderName  String?         // Nombre de quien invita
+  message     String?         // Mensaje personalizado
+  maxUses     Int             @default(1)
+  currentUses Int             @default(0)
+  
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  
+  sender      User            @relation("InviteSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver    User?           @relation("InviteReceiver", fields: [receiverId], references: [id])
 }
 
 model Workout {
-  id          String      @id @default(cuid())
-  userId      String
-  title       String
-  description String?
-  type        WorkoutType
-  duration    Int         // in minutes
-  distance    Float?      // in kilometers
-  calories    Int?
-  avgPace     String?
-  heartRate   Int?
-  location    String?
-  points      Int         @default(0)
-  garminId    String?     @unique
+  id            String      @id @default(cuid())
+  userId        String
+  title         String
+  description   String?
+  type          WorkoutType
+  duration      Int         // in minutes
+  distance      Float?      // in kilometers
+  calories      Int?
+  avgPace       String?
+  heartRate     Int?        // Mantener para compatibilidad
+  avgHeartRate  Int?        // Frecuencia cardíaca promedio
+  maxHeartRate  Int?        // Frecuencia cardíaca máxima
+  pace          String?     // Ritmo del entrenamiento
+  location      String?
+  notes         String?     // Notas adicionales
+  points        Int         @default(0)
+  garminId      String?     @unique
+  date          DateTime    @default(now()) // Fecha del entrenamiento
+  source        String      @default("MANUAL") // Origen: MANUAL, GARMIN, etc.
   
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
   
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Challenge {
@@ -200,6 +241,7 @@ model PointsHistory {
   user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+// Marketplace products (user-to-user)
 model Product {
   id          String        @id @default(cuid())
   sellerId    String
@@ -219,6 +261,106 @@ model Product {
   seller      User          @relation(fields: [sellerId], references: [id], onDelete: Cascade)
   orders      Order[]
   reviews     Review[]
+}
+
+// Official store products
+model OfficialProduct {
+  id              String              @id @default(cuid())
+  name            String
+  description     String
+  brand           String
+  category        OfficialCategory
+  originalPrice   Int                 // in cents
+  currentPrice    Int                 // in cents
+  pointsDiscount  Int                 // points required for discount
+  pointsRequired  Int                 // minimum points to purchase
+  images          String[]
+  features        String[]
+  specifications  Json?
+  stock           Int                 @default(0)
+  isActive        Boolean             @default(true)
+  isExclusive     Boolean             @default(false)
+  isFeatured      Boolean             @default(false)
+  rating          Float               @default(0)
+  reviewCount     Int                 @default(0)
+  
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  
+  orderItems      OfficialOrderItem[]
+  reviews         OfficialReview[]
+  cartItems       CartItem[]
+}
+
+// Official store orders
+model OfficialOrder {
+  id              String              @id @default(cuid())
+  userId          String
+  orderNumber     String              @unique
+  totalAmount     Int                 // in cents
+  pointsUsed      Int                 @default(0)
+  pointsDiscount  Int                 @default(0) // discount amount in cents
+  status          OfficialOrderStatus @default(PENDING)
+  paymentMethod   String?
+  paymentId       String?
+  shippingAddress Json
+  trackingNumber  String?
+  notes           String?
+  
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  
+  user            User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items           OfficialOrderItem[]
+}
+
+model OfficialOrderItem {
+  id              String          @id @default(cuid())
+  orderId         String
+  productId       String
+  quantity        Int
+  unitPrice       Int             // in cents
+  pointsUsed      Int             @default(0)
+  pointsDiscount  Int             @default(0) // discount amount in cents
+  
+  createdAt       DateTime        @default(now())
+  
+  order           OfficialOrder   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product         OfficialProduct @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model OfficialReview {
+  id        String          @id @default(cuid())
+  userId    String
+  productId String
+  rating    Int             // 1-5
+  title     String?
+  comment   String?
+  verified  Boolean         @default(false) // verified purchase
+  
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   OfficialProduct @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, productId])
+}
+
+// Shopping cart for official store
+model CartItem {
+  id        String          @id @default(cuid())
+  userId    String
+  productId String
+  quantity  Int             @default(1)
+  
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   OfficialProduct @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, productId])
 }
 
 model Order {
@@ -306,10 +448,117 @@ enum ProductCategory {
   NUTRITION
 }
 
+enum OfficialCategory {
+  WATCHES_GPS
+  SWIMMING
+  CYCLING
+  RUNNING
+  NUTRITION
+  ACCESSORIES
+  CLOTHING
+  ELECTRONICS
+}
+
 enum OrderStatus {
   PENDING
   CONFIRMED
   SHIPPED
   DELIVERED
   CANCELLED
+}
+
+enum OfficialOrderStatus {
+  PENDING
+  PAYMENT_PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum InvitationStatus {
+  PENDING
+  USED
+  EXPIRED
+  CANCELLED
+}
+
+// Modelos de Comunidad
+model CommunityPost {
+  id          String    @id @default(cuid())
+  authorId    String
+  content     String
+  imageUrl    String?
+  location    String?
+  achievement String?   // Badge de logro
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  author      User      @relation("PostAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  comments    PostComment[]
+  likes       PostLike[]
+}
+
+model PostComment {
+  id        String    @id @default(cuid())
+  postId    String
+  authorId  String
+  content   String
+  
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  
+  post      CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author    User      @relation("CommentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model PostLike {
+  id       String @id @default(cuid())
+  postId   String
+  authorId String
+  
+  createdAt DateTime @default(now())
+  
+  post     CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author   User     @relation("LikeAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  
+  @@unique([postId, authorId])
+}
+
+model CommunityEvent {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  eventType   EventType
+  date        DateTime
+  location    String
+  maxParticipants Int?
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  participants EventParticipant[]
+}
+
+model EventParticipant {
+  id       String @id @default(cuid())
+  eventId  String
+  userId   String
+  
+  createdAt DateTime @default(now())
+  
+  event    CommunityEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([eventId, userId])
+}
+
+enum EventType {
+  COMPETITION
+  TRAINING
+  EDUCATIONAL
+  SOCIAL
 }

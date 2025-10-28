@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Trophy, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { signIn, getSession } from 'next-auth/react'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -16,24 +17,24 @@ export default function LoginPage() {
     e.preventDefault()
     setIsLoading(true)
 
-    // Simulación de login - cuenta dummy
-    setTimeout(() => {
-      if (email === 'atleta@triclub.ar' && password === 'triclub123') {
-        localStorage.setItem('triclub_user', JSON.stringify({
-          id: 1,
-          name: 'Carlos Mendoza',
-          email: 'atleta@triclub.ar',
-          club: 'Club Triatlón Buenos Aires',
-          points: 2850,
-          level: 'Elite',
-          avatar: '/avatar-placeholder.jpg'
-        }))
-        router.push('/dashboard/')
-      } else {
+    try {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      })
+
+      if (result?.error) {
         alert('Credenciales incorrectas. Usa: atleta@triclub.ar / triclub123')
+      } else {
+        router.push('/dashboard')
       }
+    } catch (error) {
+      console.error('Error durante el login:', error)
+      alert('Error durante el login. Intenta nuevamente.')
+    } finally {
       setIsLoading(false)
-    }, 1500)
+    }
   }
 
   return (
@@ -139,7 +140,7 @@ export default function LoginPage() {
             </a>
             <div className="text-slate-500 text-sm">
               ¿No tienes cuenta? 
-              <a href="/triclub/" className="text-primary-400 hover:text-primary-300 ml-1">
+              <a href="/" className="text-primary-400 hover:text-primary-300 ml-1">
                 Solicitar invitación
               </a>
             </div>

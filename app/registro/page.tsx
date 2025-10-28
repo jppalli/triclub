@@ -11,18 +11,19 @@ export default function RegistroPage() {
   const [isValidating, setIsValidating] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [inviteData, setInviteData] = useState<any>(null)
   
   const [formData, setFormData] = useState({
-    nombre: '',
-    apellido: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
-    telefono: '',
-    fechaNacimiento: ''
+    phone: '',
+    city: ''
   })
 
-  // Códigos válidos de demo
+  // Códigos válidos de demo (para testing)
   const validCodes = ['TRICLUB2024', 'ELITE123', 'GARMIN456', 'BUENOS789']
 
   const handleCodeSubmit = async (e: React.FormEvent) => {
@@ -30,15 +31,51 @@ export default function RegistroPage() {
     setIsValidating(true)
     setCodeError('')
 
-    // Simulación de validación
-    setTimeout(() => {
-      if (validCodes.includes(inviteCode.toUpperCase())) {
+    try {
+      const response = await fetch('/api/validate-invite', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code: inviteCode }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.valid) {
+        setInviteData(data.invitation)
         setStep(2)
       } else {
-        setCodeError('Código de invitación inválido. Verifica con tu líder de club.')
+        // Si falla la API, probar con códigos de demo
+        if (validCodes.includes(inviteCode.toUpperCase())) {
+          setInviteData({
+            code: inviteCode,
+            senderName: 'Demo Club',
+            message: 'Bienvenido al club de demo',
+            sender: { name: 'Demo Club', club: 'TriClub Demo' }
+          })
+          setStep(2)
+        } else {
+          setCodeError(data.error || 'Código de invitación inválido. Verifica con tu líder de club.')
+        }
       }
+    } catch (error) {
+      console.error('Error validating code:', error)
+      // Fallback a códigos de demo
+      if (validCodes.includes(inviteCode.toUpperCase())) {
+        setInviteData({
+          code: inviteCode,
+          senderName: 'Demo Club',
+          message: 'Bienvenido al club de demo',
+          sender: { name: 'Demo Club', club: 'TriClub Demo' }
+        })
+        setStep(2)
+      } else {
+        setCodeError('Error de conexión. Intenta nuevamente.')
+      }
+    } finally {
       setIsValidating(false)
-    }, 1500)
+    }
   }
 
   const handleRegistration = async (e: React.FormEvent) => {
@@ -49,13 +86,43 @@ export default function RegistroPage() {
       return
     }
 
+    if (formData.password.length < 6) {
+      alert('La contraseña debe tener al menos 6 caracteres')
+      return
+    }
+
     setIsValidating(true)
 
-    // Simulación de registro
-    setTimeout(() => {
-      setStep(3)
+    try {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          inviteCode,
+          email: formData.email,
+          password: formData.password,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          phone: formData.phone,
+          city: formData.city
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        setStep(3)
+      } else {
+        alert(data.error || 'Error al crear la cuenta. Intenta nuevamente.')
+      }
+    } catch (error) {
+      console.error('Registration error:', error)
+      alert('Error de conexión. Intenta nuevamente.')
+    } finally {
       setIsValidating(false)
-    }, 2000)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -148,11 +215,11 @@ export default function RegistroPage() {
             <div className="mt-6 text-center">
               <p className="text-slate-400 text-sm">
                 ¿No tienes código? 
-                <a href="/triclub/unirse/" className="text-primary-400 hover:text-primary-300 ml-1">
+                <a href="/unirse" className="text-primary-400 hover:text-primary-300 ml-1">
                   Solicita unirte al club
                 </a>
               </p>
-              <a href="/triclub/" className="text-slate-500 hover:text-slate-400 text-sm mt-2 inline-block">
+              <a href="/" className="text-slate-500 hover:text-slate-400 text-sm mt-2 inline-block">
                 ← Volver al inicio
               </a>
             </div>
@@ -183,6 +250,16 @@ export default function RegistroPage() {
               <CheckCircle className="h-5 w-5 text-green-500" />
               <span className="text-green-400 text-sm">Código válido: {inviteCode}</span>
             </div>
+            {inviteData?.senderName && (
+              <div className="bg-primary-600/20 border border-primary-500/30 rounded-xl p-4 mb-4">
+                <p className="text-primary-300 text-sm">
+                  Invitado por: <span className="font-semibold">{inviteData.senderName}</span>
+                </p>
+                {inviteData.message && (
+                  <p className="text-primary-400 text-sm mt-1">"{inviteData.message}"</p>
+                )}
+              </div>
+            )}
             <h1 className="text-3xl font-bold text-white mb-2">Crear tu Cuenta</h1>
             <p className="text-slate-300">Completa tus datos para finalizar el registro</p>
           </motion.div>
@@ -205,8 +282,8 @@ export default function RegistroPage() {
                     <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />
                     <input
                       type="text"
-                      name="nombre"
-                      value={formData.nombre}
+                      name="firstName"
+                      value={formData.firstName}
                       onChange={handleChange}
                       className="w-full pl-10 pr-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       placeholder="Tu nombre"
@@ -220,8 +297,8 @@ export default function RegistroPage() {
                   </label>
                   <input
                     type="text"
-                    name="apellido"
-                    value={formData.apellido}
+                    name="lastName"
+                    value={formData.lastName}
                     onChange={handleChange}
                     className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     placeholder="Tu apellido"
@@ -341,14 +418,14 @@ export default function RegistroPage() {
           </p>
           <div className="space-y-3">
             <a
-              href="/triclub/login/"
+              href="/login"
               className="w-full bg-gradient-to-r from-primary-600 to-accent-600 text-white py-3 rounded-xl font-semibold hover:from-primary-700 hover:to-accent-700 transition-all inline-flex items-center justify-center gap-2"
             >
               Iniciar Sesión
               <ArrowRight className="h-4 w-4" />
             </a>
             <a
-              href="/triclub/"
+              href="/"
               className="w-full border border-slate-600 text-slate-300 py-3 rounded-xl font-medium hover:border-slate-500 hover:text-white transition-all inline-block"
             >
               Volver al Inicio

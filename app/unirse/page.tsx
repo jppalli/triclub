@@ -55,7 +55,7 @@ export default function UnirsePage() {
               Mientras tanto, síguenos en nuestras redes sociales para estar al día con las últimas novedades.
             </p>
             <a
-              href="/triclub/"
+              href="/"
               className="bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-700 transition-colors inline-flex items-center gap-2"
             >
               Volver al Inicio
@@ -262,7 +262,7 @@ export default function UnirsePage() {
             <p className="text-slate-400 text-sm">
               Al enviar esta solicitud, aceptas nuestros términos y condiciones.
             </p>
-            <a href="/triclub/" className="text-primary-400 hover:text-primary-300 text-sm mt-2 inline-block">
+            <a href="/" className="text-primary-400 hover:text-primary-300 text-sm mt-2 inline-block">
               ← Volver al inicio
             </a>
           </div>
