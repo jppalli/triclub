@@ -14,7 +14,8 @@
     "db:push": "prisma db push",
     "db:seed": "tsx scripts/setup-db.ts",
     "db:studio": "prisma studio",
-    "db:reset": "prisma migrate reset"
+    "db:reset": "prisma migrate reset",
+    "db:test": "tsx scripts/test-connection.ts"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.0",

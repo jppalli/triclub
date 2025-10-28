@@ -1,0 +1,108 @@
+// Mock data for development without database connection
+
+export const mockUser = {
+  id: '1',
+  email: 'atleta@triclub.ar',
+  name: 'Carlos Mendoza',
+  firstName: 'Carlos',
+  lastName: 'Mendoza',
+  phone: '+54 11 1234-5678',
+  city: 'Buenos Aires',
+  club: 'Club Triatlón Buenos Aires',
+  bio: 'Triatleta apasionado por los desafíos y la superación personal.',
+  level: 'ELITE' as const,
+  points: 2850,
+  image: null,
+  createdAt: new Date('2024-01-01'),
+}
+
+export const mockWorkouts = [
+  {
+    id: '1',
+    userId: '1',
+    title: 'Entrenamiento de Natación',
+    description: '2.5km en piscina olímpica',
+    type: 'SWIMMING' as const,
+    duration: 45,
+    distance: 2.5,
+    calories: 420,
+    avgPace: '1:48/100m',
+    heartRate: 145,
+    location: 'Club Náutico San Isidro',
+    points: 75,
+    garminId: null,
+    createdAt: new Date('2024-01-15'),
+    updatedAt: new Date('2024-01-15'),
+  },
+  {
+    id: '2',
+    userId: '1',
+    title: 'Ruta por Tigre',
+    description: '45km en bicicleta por el delta',
+    type: 'CYCLING' as const,
+    duration: 95,
+    distance: 45,
+    calories: 890,
+    avgPace: '28.4 km/h',
+    heartRate: 152,
+    location: 'Delta del Tigre',
+    points: 90,
+    garminId: null,
+    createdAt: new Date('2024-01-14'),
+    updatedAt: new Date('2024-01-14'),
+  },
+  {
+    id: '3',
+    userId: '1',
+    title: 'Carrera Matutina',
+    description: '10km por la costanera',
+    type: 'RUNNING' as const,
+    duration: 42,
+    distance: 10,
+    calories: 650,
+    avgPace: '4:12/km',
+    heartRate: 158,
+    location: 'Puerto Madero',
+    points: 50,
+    garminId: null,
+    createdAt: new Date('2024-01-13'),
+    updatedAt: new Date('2024-01-13'),
+  },
+]
+
+export const mockPointsHistory = [
+  {
+    id: '1',
+    userId: '1',
+    points: 500,
+    type: 'BONUS' as const,
+    description: 'Bonus de bienvenida',
+    reference: null,
+    createdAt: new Date('2024-01-01'),
+  },
+  {
+    id: '2',
+    userId: '1',
+    points: 75,
+    type: 'WORKOUT' as const,
+    description: 'Entrenamiento de natación completado',
+    reference: '1',
+    createdAt: new Date('2024-01-15'),
+  },
+  {
+    id: '3',
+    userId: '1',
+    points: 200,
+    type: 'CHALLENGE' as const,
+    description: 'Desafío semanal completado',
+    reference: null,
+    createdAt: new Date('2024-01-14'),
+  },
+]
+
+export const validInviteCodes = [
+  'TRICLUB2024',
+  'ELITE123', 
+  'GARMIN456',
+  'BUENOS789'
+]
