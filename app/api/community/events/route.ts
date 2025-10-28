@@ -82,7 +82,6 @@ export async function POST(request: Request) {
 
     const event = await prisma.communityEvent.create({
       data: {
-        organizerId: user.id,
         title,
         description,
         date: new Date(date),
