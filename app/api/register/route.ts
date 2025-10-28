@@ -180,10 +180,16 @@ export async function POST(request: Request) {
       message: 'Usuario registrado exitosamente'
     })
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ Registration error:', error)
+    console.error('❌ Error message:', error.message)
+    console.error('❌ Error stack:', error.stack)
+    console.error('❌ DATABASE_URL exists:', !!process.env.DATABASE_URL)
     return NextResponse.json(
-      { error: 'Error interno del servidor' },
+      { 
+        error: 'Error interno del servidor',
+        details: process.env.NODE_ENV === 'development' ? error.message : undefined
+      },
       { status: 500 }
     )
   }
