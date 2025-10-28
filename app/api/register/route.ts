@@ -1,9 +1,6 @@
 import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
-
-// Crear instancia directa de Prisma para evitar problemas de importación
-const prisma = new PrismaClient()
+import { prisma } from '@/lib/prisma'
 
 // Función para generar código de invitación único
 function generateInviteCode(): string {
