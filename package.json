@@ -8,7 +8,13 @@
     "build": "next build",
     "export": "next build && next export",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:seed": "tsx scripts/setup-db.ts",
+    "db:studio": "prisma studio",
+    "db:reset": "prisma migrate reset"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.0",
@@ -22,6 +28,7 @@
     "@trpc/server": "^11.7.0",
     "autoprefixer": "^10.4.0",
     "bcryptjs": "^3.0.2",
+    "dotenv": "^17.2.3",
     "framer-motion": "^10.16.0",
     "lucide-react": "^0.292.0",
     "next": "^14.0.0",
@@ -41,6 +48,7 @@
     "@types/react-dom": "^18.0.0",
     "eslint": "^8.0.0",
     "eslint-config-next": "^14.0.0",
+    "tsx": "^4.20.6",
     "typescript": "^5.0.0"
   }
 }

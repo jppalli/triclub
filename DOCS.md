@@ -140,3 +140,12 @@ Para más información sobre integración de clubes o acceso a la plataforma:
 - **Sitio Web**: https://jppalli.github.io/triclub/
 - **Login Demo**: https://jppalli.github.io/triclub/login/
 - **Credenciales**: atleta@triclub.ar / triclub123
+
+## 🗄️ Configuración de Base de Datos
+
+Ver [SETUP-DATABASE.md](./SETUP-DATABASE.md) para instrucciones completas.
+
+**Configuración rápida con Supabase:**
+1. Crear proyecto en [supabase.com](https://supabase.com)
+2. Copiar DATABASE_URL a `.env.local`
+3. Ejecutar `npm run db:push && npm run db:seed`
