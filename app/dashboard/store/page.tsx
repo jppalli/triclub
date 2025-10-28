@@ -359,7 +359,7 @@ export default function StorePage() {
                   <div className="mb-4">
                     <div className="text-slate-400 text-sm mb-2">Características:</div>
                     <div className="space-y-1">
-                      {product.features.slice(0, 2).map((feature, i) => (
+                      {product.features.slice(0, 2).map((feature: string, i: number) => (
                         <div key={i} className="text-slate-300 text-xs">• {feature}</div>
                       ))}
                     </div>

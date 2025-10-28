@@ -216,7 +216,7 @@ export const challengesRouter = createTRPCRouter({
   updateProgress: protectedProcedure
     .input(z.object({ 
       challengeId: z.string(),
-      progress: z.record(z.any())
+      progress: z.record(z.string(), z.any())
     }))
     .mutation(async ({ ctx, input }) => {
       const { challengeId, progress } = input

@@ -24,7 +24,7 @@ export const authOptions: NextAuthOptions = {
           }
         })
 
-        if (!user) {
+        if (!user || !user.password) {
           return null
         }
 
@@ -64,7 +64,6 @@ export const authOptions: NextAuthOptions = {
     }
   },
   pages: {
-    signIn: "/login",
-    signUp: "/registro"
+    signIn: "/login"
   }
 }

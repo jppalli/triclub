@@ -274,10 +274,10 @@ export default function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProp
               </button>
               <button
                 type="submit"
-                disabled={createWorkout.isLoading || !formData.title || !formData.duration}
+                disabled={createWorkout.isPending || !formData.title || !formData.duration}
                 className="flex-1 px-6 py-3 bg-gradient-to-r from-primary-600 to-accent-600 text-white rounded-xl font-medium hover:from-primary-700 hover:to-accent-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {createWorkout.isLoading ? 'Guardando...' : 'Guardar Entrenamiento'}
+                {createWorkout.isPending ? 'Guardando...' : 'Guardar Entrenamiento'}
               </button>
             </div>
           </form>

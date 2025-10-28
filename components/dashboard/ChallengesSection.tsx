@@ -248,8 +248,8 @@ const generateDynamicChallenges = (userStats?: any) => {
       if (b.progress > 0 && a.progress === 0) return 1
       
       // Luego por dificultad (fácil primero para usuarios nuevos)
-      const difficultyOrder = { 'Fácil': 1, 'Medio': 2, 'Difícil': 3, 'Épico': 4 }
-      return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty]
+      const difficultyOrder: Record<string, number> = { 'Fácil': 1, 'Medio': 2, 'Difícil': 3, 'Épico': 4 }
+      return (difficultyOrder[a.difficulty] || 0) - (difficultyOrder[b.difficulty] || 0)
     })
     .slice(0, 4)
   

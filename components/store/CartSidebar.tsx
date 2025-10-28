@@ -109,7 +109,8 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                                       className="w-full h-full object-cover rounded-lg"
                                       onError={(e) => {
                                         e.currentTarget.style.display = 'none'
-                                        e.currentTarget.nextElementSibling!.style.display = 'flex'
+                                        const nextEl = e.currentTarget.nextElementSibling as HTMLElement
+                                        if (nextEl) nextEl.style.display = 'flex'
                                       }}
                                     />
                                   ) : null}
