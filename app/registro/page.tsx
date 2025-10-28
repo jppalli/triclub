@@ -3,8 +3,11 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Trophy, Key, User, Mail, Lock, Eye, EyeOff, ArrowRight, CheckCircle, AlertCircle } from 'lucide-react'
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 export default function RegistroPage() {
+  const router = useRouter()
   const [step, setStep] = useState(1) // 1: código, 2: registro, 3: éxito
   const [inviteCode, setInviteCode] = useState('')
   const [codeError, setCodeError] = useState('')
@@ -113,7 +116,20 @@ export default function RegistroPage() {
       const data = await response.json()
 
       if (response.ok && data.success) {
-        setStep(3)
+        // Auto-login after successful registration
+        const signInResult = await signIn('credentials', {
+          email: formData.email,
+          password: formData.password,
+          redirect: false
+        })
+
+        if (signInResult?.ok) {
+          // Redirect to dashboard
+          router.push('/dashboard')
+        } else {
+          // Registration succeeded but login failed - show success and ask to login
+          setStep(3)
+        }
       } else {
         alert(data.error || 'Error al crear la cuenta. Intenta nuevamente.')
       }
