@@ -75,16 +75,17 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { content, type, images } = body
+    const { content, imageUrl, location, achievement } = body
 
-    console.log('📝 Creating new community post:', { content: content.substring(0, 50), type })
+    console.log('📝 Creating new community post:', { content: content.substring(0, 50) })
 
     const post = await prisma.communityPost.create({
       data: {
         authorId: user.id,
         content,
-        type: type || 'GENERAL',
-        images: images || []
+        imageUrl: imageUrl || null,
+        location: location || null,
+        achievement: achievement || null
       },
       include: {
         author: {
